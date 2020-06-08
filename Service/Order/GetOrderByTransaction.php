@@ -9,7 +9,7 @@ namespace EMSPay\Payment\Service\Order;
 
 use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\OrderRepository;
 
 /**
@@ -51,9 +51,11 @@ class GetOrderByTransaction
     }
 
     /**
+     * Get Order by EMS Transaction ID
+     *
      * @param string $transactionId
      *
-     * @return bool|Order
+     * @return OrderInterface|null
      */
     public function execute(string $transactionId)
     {
@@ -62,14 +64,15 @@ class GetOrderByTransaction
             ->setPageSize(1)
             ->create();
 
-        $orderList = $this->orderRepository->getList($searchCriteria);
-        $order = $orderList->getFirstItem();
+        $orders = $this->orderRepository->getList($searchCriteria)->getItems();
+        $order = reset($orders);
 
-        if ($order) {
-            return $order;
-        } else {
-            $this->configRepository->addTolog('error', __('No order found for transaction id %1', $transactionId));
-            return false;
+        if (!$order) {
+            $this->configRepository->addTolog(
+                'error', __('No order found for transaction id %1', $transactionId)
+            );
         }
+
+        return $order;
     }
 }
