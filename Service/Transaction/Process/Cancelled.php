@@ -40,8 +40,9 @@ class Cancelled extends AbstractTransaction
             'status' => $this->status,
             'order_id' => $order->getEntityId(),
             'type' => $type,
-            'cart_msg' => __('There was a problem processing your payment
-            because it has been cancelled. Please try again.'),
+            'cart_msg' => __(
+                'There was a problem processing your payment because it has been cancelled. Please try again.'
+            ),
         ];
 
         $this->configRepository->addTolog('success', $result);
