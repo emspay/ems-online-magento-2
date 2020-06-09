@@ -40,9 +40,9 @@ class Processing extends AbstractTransaction
         string $type
     ): array {
         $method = $this->getMethodFromOrder($order);
-        if ($method == Banktransfer::METHOD_CODE) {
+        if ($method != Banktransfer::METHOD_CODE) {
             return [
-                'success' => true,
+                'success' => false,
                 'status' => $this->status,
                 'order_id' => $order->getEntityId(),
                 'type' => $type
