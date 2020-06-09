@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace EMSPay\Payment\Service\Order;
 
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\OrderRepository;
@@ -29,25 +28,17 @@ class GetOrderByTransaction
     private $searchCriteriaBuilder;
 
     /**
-     * @var ConfigRepository
-     */
-    private $configRepository;
-
-    /**
      * GetByTransaction constructor.
      *
      * @param OrderRepository $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param ConfigRepository $configRepository
      */
     public function __construct(
         OrderRepository $orderRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        ConfigRepository $configRepository
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->configRepository = $configRepository;
     }
 
     /**
@@ -65,14 +56,6 @@ class GetOrderByTransaction
             ->create();
 
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
-        $order = reset($orders);
-
-        if (!$order) {
-            $this->configRepository->addTolog(
-                'error', __('No order found for transaction id %1', $transactionId)
-            );
-        }
-
-        return $order;
+        return reset($orders);
     }
 }

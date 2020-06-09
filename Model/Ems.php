@@ -269,8 +269,10 @@ class Ems extends AbstractMethod
 
         $order = $this->getOrderByTransaction->execute($transactionId);
         if (!$order) {
-            $msg = ['error' => true, 'msg' => __('Order not found')];
-            $this->configRepository->addTolog('error', $msg);
+            $msg = ['error' => true, 'msg' => __('Order not found for transaction id: %1', $transactionId)];
+            if ($type != 'webhook') {
+                $this->configRepository->addTolog('error', $msg);
+            }
             return $msg;
         }
 
