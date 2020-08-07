@@ -374,7 +374,7 @@ class Ems extends AbstractMethod
             'amount' => $this->configRepository->getAmountInCents((float)$order->getBaseGrandTotal()),
             'currency' => $order->getOrderCurrencyCode(),
             'description' => $this->configRepository->getDescription($order, $methodCode),
-            'merchant_order_id' => $order->getEntityId(),
+            'merchant_order_id' => $order->getIncrementId(),
             'return_url' => $this->getReturnUrl(),
             'webhook_url' => $this->getWebhookUrl(),
             'transactions' => [['payment_method' => $platformCode]],
