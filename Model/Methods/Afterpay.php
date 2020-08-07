@@ -95,13 +95,13 @@ class Afterpay extends Ems
 
         $additionalData = $data->getAdditionalData();
         if (isset($additionalData['issuer'])) {
-            $this->getInfoInstance()->setAdditionalInformation('issuer', $data['issuer']);
+            $this->getInfoInstance()->setAdditionalInformation('issuer', $additionalData['issuer']);
         }
         if (isset($additionalData['prefix'])) {
-            $this->getInfoInstance()->setAdditionalInformation('prefix', $data['prefix']);
+            $this->getInfoInstance()->setAdditionalInformation('prefix', $additionalData['prefix']);
         }
         if (isset($additionalData['dob'])) {
-            $this->getInfoInstance()->setAdditionalInformation('dob', $data['dob']);
+            $this->getInfoInstance()->setAdditionalInformation('dob', $additionalData['dob']);
         }
         return $this;
     }
