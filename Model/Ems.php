@@ -338,7 +338,7 @@ class Ems extends AbstractMethod
 
         try {
             $client = $this->loadGingerClient($storeId, $testApiKey);
-            $client->refundOrder(
+            $emsOrder = $client->refundOrder(
                 $transactionId,
                 [
                     'amount' => $this->configRepository->getAmountInCents((float)$amount),
@@ -348,6 +348,12 @@ class Ems extends AbstractMethod
         } catch (\Exception $e) {
             $this->configRepository->addTolog('error', $e->getMessage());
             throw new LocalizedException(__('Error: not possible to create an online refund: %1', $e->getMessage()));
+        }
+
+        if (in_array($emsOrder['status'], ['error', 'cancelled', 'expired'])) {
+            $reason = current($emsOrder['transactions'])['reason'] ?? 'Refund order is not completed';
+            $this->configRepository->addTolog('error', 'Refund not possible: ' . $reason);
+            throw new LocalizedException(__('Refund order is not completed'));
         }
 
         return $this;
