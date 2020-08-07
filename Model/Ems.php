@@ -7,10 +7,20 @@ declare(strict_types=1);
 
 namespace EMSPay\Payment\Model;
 
+use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use EMSPay\Payment\Model\Api\GingerClient;
+use EMSPay\Payment\Model\Api\UrlProvider;
+use EMSPay\Payment\Service\Order\CustomerData;
+use EMSPay\Payment\Service\Order\GetOrderByTransaction;
+use EMSPay\Payment\Service\Order\OrderLines;
+use EMSPay\Payment\Service\Transaction\ProcessRequest as ProcessTransactionRequest;
+use EMSPay\Payment\Service\Transaction\ProcessUpdate as ProcessTransactionUpdate;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -19,19 +29,9 @@ use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\Logger;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Checkout\Model\Session;
-use EMSPay\Payment\Model\Api\UrlProvider;
-use EMSPay\Payment\Model\Api\GingerClient;
-use EMSPay\Payment\Service\Order\OrderLines;
-use EMSPay\Payment\Service\Order\CustomerData;
-use EMSPay\Payment\Service\Order\GetOrderByTransaction;
-use EMSPay\Payment\Service\Transaction\ProcessUpdate as ProcessTransactionUpdate;
-use EMSPay\Payment\Service\Transaction\ProcessRequest as ProcessTransactionRequest;
-use Magento\Framework\Exception\LocalizedException;
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Ems payment class
@@ -348,7 +348,7 @@ class Ems extends AbstractMethod
 
         try {
             $client = $this->loadGingerClient($storeId, $testApiKey);
-            $client->refundOrder(
+            $emsOrder = $client->refundOrder(
                 $transactionId,
                 [
                     'amount' => $this->configRepository->getAmountInCents((float)$amount),
@@ -358,6 +358,12 @@ class Ems extends AbstractMethod
         } catch (\Exception $e) {
             $this->configRepository->addTolog('error', $e->getMessage());
             throw new LocalizedException(__('Error: not possible to create an online refund: %1', $e->getMessage()));
+        }
+
+        if (in_array($emsOrder['status'], ['error', 'cancelled', 'expired'])) {
+            $reason = current($emsOrder['transactions'])['reason'] ?? 'Refund order is not completed';
+            $this->configRepository->addTolog('error', 'Refund not possible: ' . $reason);
+            throw new LocalizedException(__('Refund order is not completed'));
         }
 
         return $this;
