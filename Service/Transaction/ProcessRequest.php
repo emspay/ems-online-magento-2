@@ -55,7 +55,7 @@ class ProcessRequest extends AbstractTransaction
             return ['error' => $error];
         }
 
-        if (in_array($method, [Banktransfer::METHOD_CODE, Klarna::METHOD_CODE, Afterpay::METHOD_CODE])) {
+        if (in_array($method, [Banktransfer::METHOD_CODE, Afterpay::METHOD_CODE])) {
             return ['redirect' => $this->urlProvider->getSuccessProcessUrl((string)$transactionId)];
         }
 

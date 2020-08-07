@@ -123,6 +123,8 @@ class Klarna extends Ems
                 'Klarna payment captured for order: ' . $order->getIncrementId()
             );
         } catch (\Exception $e) {
+            $msg = __('Warning: Unable to capture Klarna Payment for this order, full detail: var/log/ems-payment.log');
+            $this->messageManager->addErrorMessage($msg);
             $this->configRepository->addTolog('error', 'Function: captureOrder: ' . $e->getMessage());
         }
 
