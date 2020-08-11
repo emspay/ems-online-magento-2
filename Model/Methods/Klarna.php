@@ -89,10 +89,10 @@ class Klarna extends Ems
 
         $additionalData = $data->getAdditionalData();
         if (isset($additionalData['prefix'])) {
-            $this->getInfoInstance()->setAdditionalInformation('prefix', $data['prefix']);
+            $this->getInfoInstance()->setAdditionalInformation('prefix', $additionalData['prefix']);
         }
         if (isset($additionalData['dob'])) {
-            $this->getInfoInstance()->setAdditionalInformation('dob', $data['dob']);
+            $this->getInfoInstance()->setAdditionalInformation('dob', $additionalData['dob']);
         }
         return $this;
     }
@@ -123,6 +123,8 @@ class Klarna extends Ems
                 'Klarna payment captured for order: ' . $order->getIncrementId()
             );
         } catch (\Exception $e) {
+            $msg = __('Warning: Unable to capture Klarna Payment for this order, full detail: var/log/ems-payment.log');
+            $this->messageManager->addErrorMessage($msg);
             $this->configRepository->addTolog('error', 'Function: captureOrder: ' . $e->getMessage());
         }
 
