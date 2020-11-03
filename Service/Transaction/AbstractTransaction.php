@@ -30,6 +30,7 @@ use Magento\Sales\Model\OrderRepository;
 class AbstractTransaction
 {
 
+
     /**
      * @var ConfigRepository
      */
@@ -186,8 +187,14 @@ class AbstractTransaction
         OrderInterface $order,
         array $transaction
     ): OrderInterface {
+
         /** @var Payment $payment */
         $payment = $order->getPayment();
+        if ($order->hasInvoices() || $payment->getAmountPaid()) {
+            $errorMsg = __('Order %1 already invoiced/paid, no need for capture', $order->getIncrementId());
+            $this->configRepository->addTolog('error', $errorMsg);
+            return $order;
+        }
 
         $payment->setTransactionId($transaction['id']);
         $payment->isSameCurrency();

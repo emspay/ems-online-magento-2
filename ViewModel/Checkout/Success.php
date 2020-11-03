@@ -62,9 +62,9 @@ You will receive the order email once the payment is successful.";
     }
 
     /**
-     * @return bool|string[]
+     * @return string
      */
-    public function getMailingAddress()
+    public function getMailingAddress(): string
     {
         $order = $this->checkoutSession->getLastRealOrder();
 
@@ -75,13 +75,13 @@ You will receive the order email once the payment is successful.";
             return $payment->getAdditionalInformation('mailing_address');
         }
 
-        return false;
+        return '';
     }
 
     /**
      * @return string
      */
-    public function getThankYouMessage()
+    public function getThankYouMessage(): string
     {
         $transaction = null;
         $order = $this->checkoutSession->getLastRealOrder();
@@ -89,13 +89,13 @@ You will receive the order email once the payment is successful.";
         /** @var Payment $payment */
         $payment = $order->getPayment();
         $paymentMethod = $payment->getMethod();
+        $transactionId = $order->getEmspayTransactionId();
 
-        if ($paymentMethod == Banktransfer::METHOD_CODE) {
+        if (!$transactionId || $paymentMethod == Banktransfer::METHOD_CODE) {
             return '';
         }
 
         try {
-            $transactionId = $order->getEmspayTransactionId();
             $method = $order->getPayment()->getMethodInstance()->getCode();
             $testApiKey = $this->configRepository->getTestKey((string)$method, (int)$order->getStoreId());
             $client = $this->emsModel->loadGingerClient((int)$order->getStoreId(), $testApiKey);
@@ -104,24 +104,27 @@ You will receive the order email once the payment is successful.";
             $this->configRepository->addTolog('error', $e->getMessage());
         }
 
-        if ($transaction) {
-            $paymentStatus = $transaction['status'];
-            if (($paymentStatus == 'processing') && ($paymentMethod == Ideal::METHOD_CODE)) {
-                $message = self::IDEAL_PROCESSING_MESSAGE;
-                return __($message)->render();
-            }
-            if (($paymentStatus == 'pending') && ($paymentMethod == KlarnaDirect::METHOD_CODE)) {
-                $message = self::SOFORT_PENDING_MESSAGE;
-                return __($message)->render();
-            }
+        if (!$transaction) {
+            return '';
         }
+
+        $paymentStatus = $transaction['status'] ?? null;
+        if (($paymentStatus == 'processing') && ($paymentMethod == Ideal::METHOD_CODE)) {
+            $message = self::IDEAL_PROCESSING_MESSAGE;
+            return __($message)->render();
+        }
+        if (($paymentStatus == 'pending') && ($paymentMethod == KlarnaDirect::METHOD_CODE)) {
+            $message = self::SOFORT_PENDING_MESSAGE;
+            return __($message)->render();
+        }
+
         return '';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCompanyName()
+    public function getCompanyName(): string
     {
         $storeId = $this->configRepository->getCurrentStoreId();
         return $this->configRepository->getCompanyName((int)$storeId);
