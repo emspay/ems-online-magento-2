@@ -97,3 +97,4 @@
 "Your order has been received.","Your order has been received."
 "Your order %id% at %name%","Your order %id% at %name%"
 "Unfortunately, you cannot use AfterPay as Afterpay is only available for addresses in the Netherlands and Belgium. Please use the correct address or select another payment method.","Unfortunately, you cannot use AfterPay as Afterpay is only available for addresses in the Netherlands and Belgium. Please use the correct address or select another payment method."
+"-- Select your bank","-- Select your bank"

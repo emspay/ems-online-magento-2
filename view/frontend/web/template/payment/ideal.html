@@ -19,9 +19,11 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="field-select-billing">
-            <select data-bind="options: getIssuers(), optionsText: 'name', optionsValue: 'id', value: selectedIssuer"></select>
-        </div>
+        <form class="form" data-bind="attr: {'id': getCode() + '-form'}">
+            <div class="field-select-billing">
+                <select data-bind="options: getIssuers(), optionsText: 'name', optionsValue: 'id', value: selectedIssuer" data-validate="{required:true, 'validate-bank':true}"></select>
+            </div>
+        </form>
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
