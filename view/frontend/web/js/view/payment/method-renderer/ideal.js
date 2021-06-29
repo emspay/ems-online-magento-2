@@ -18,7 +18,9 @@ define(
                 selectedIssuer: null
             },
             getIssuers: function () {
-                return checkoutConfig[this.item.method].issuers;
+                var issuers = checkoutConfig[this.item.method].issuers;
+                issuers.unshift({"id":"SELECTYOURBANK", "name":"-- Select your bank"});
+                return issuers;
             },
             getData: function () {
                 return {
@@ -27,6 +29,10 @@ define(
                         "issuer": this.selectedIssuer
                     }
                 };
+            },
+            validate: function () {
+                var form = $('#emspay_methods_ideal-form');
+                return form.validation() && form.validation('isValid');
             }
         });
     }
