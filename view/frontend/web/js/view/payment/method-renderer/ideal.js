@@ -7,9 +7,10 @@ define(
     [
         'ko',
         'jquery',
+        'mage/translate',
         'EMSPay_Payment/js/view/payment/method-renderer/default'
     ],
-    function (ko, $, Component) {
+    function (ko, $, $t, Component) {
         var checkoutConfig = window.checkoutConfig.payment;
         'use strict';
         return Component.extend({
@@ -19,7 +20,7 @@ define(
             },
             getIssuers: function () {
                 var issuers = checkoutConfig[this.item.method].issuers;
-                issuers.unshift({"id":"SELECTYOURBANK", "name":"-- Select your bank"});
+                issuers.unshift({"id":"SELECTYOURBANK", "name":$t('-- Select your bank')});
                 return issuers;
             },
             getData: function () {
