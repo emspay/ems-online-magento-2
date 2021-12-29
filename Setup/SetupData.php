@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Setup;
+namespace GingerPay\Payment\Setup;
 
+use GingerPay\Payment\Redefiners\Setup\SetupRedefiner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Sales\Setup\SalesSetup;
@@ -15,20 +16,9 @@ use Magento\Sales\Setup\SalesSetupFactory;
 /**
  * InstallData setup class
  */
-class SetupData
+class SetupData extends SetupRedefiner
 {
-
-    const TRANSACTION_ID = 'emspay_transaction_id';
-
-    /**
-     * @var SalesSetupFactory
-     */
-    private $salesSetupFactory;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
+    const TRANSACTION_ID = 'gingerpay_transaction_id';
 
     /**
      * SetupData constructor.
@@ -42,28 +32,5 @@ class SetupData
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->resourceConnection = $resourceConnection;
-    }
-
-    /**
-     * @param ModuleDataSetupInterface $setup
-     */
-    public function addTansactionId(ModuleDataSetupInterface $setup)
-    {
-        /** @var SalesSetup $salesSetup */
-        $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
-        $options = ['type' => 'varchar', 'visible' => false, 'required' => false];
-        $salesSetup->addAttribute('order', self::TRANSACTION_ID, $options);
-    }
-
-    /**
-     * @param ModuleDataSetupInterface $setup
-     */
-    public function addIndex(ModuleDataSetupInterface $setup)
-    {
-        $setup->getConnection()->addIndex(
-            $setup->getTable('sales_order'),
-            $this->resourceConnection->getIdxName('sales_order', [self::TRANSACTION_ID]),
-            [self::TRANSACTION_ID]
-        );
     }
 }

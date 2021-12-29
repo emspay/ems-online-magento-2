@@ -1,57 +1,27 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Transaction;
+namespace GingerPay\Payment\Service\Transaction;
 
-use EMSPay\Payment\Service\Transaction\Process\Cancelled;
-use EMSPay\Payment\Service\Transaction\Process\Complete;
-use EMSPay\Payment\Service\Transaction\Process\Error;
-use EMSPay\Payment\Service\Transaction\Process\Expired;
-use EMSPay\Payment\Service\Transaction\Process\Processing;
-use EMSPay\Payment\Service\Transaction\Process\Unknown;
+use GingerPay\Payment\Redefiners\Service\TransactionRedefiner;
+use GingerPay\Payment\Service\Transaction\Process\Cancelled;
+use GingerPay\Payment\Service\Transaction\Process\Complete;
+use GingerPay\Payment\Service\Transaction\Process\Error;
+use GingerPay\Payment\Service\Transaction\Process\Expired;
+use GingerPay\Payment\Service\Transaction\Process\Processing;
+use GingerPay\Payment\Service\Transaction\Process\Unknown;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Process Update service class
  */
-class ProcessUpdate
+class ProcessUpdate extends TransactionRedefiner
 {
-
-    /**
-     * @var Processing
-     */
-    private $processing;
-
-    /**
-     * @var Cancelled
-     */
-    private $cancelled;
-
-    /**
-     * @var Error
-     */
-    private $error;
-
-    /**
-     * @var Expired
-     */
-    private $expired;
-
-    /**
-     * @var Complete
-     */
-    private $complete;
-
-    /**
-     * @var Unknown
-     */
-    private $unknown;
-
     /**
      * Process constructor.
      *
@@ -88,20 +58,6 @@ class ProcessUpdate
      */
     public function execute(array $transaction, OrderInterface $order, string $type): array
     {
-        $status = !empty($transaction['status']) ? $transaction['status'] : '';
-        switch ($status) {
-            case 'error':
-                return $this->error->execute($order, $type);
-            case 'expired':
-                return $this->expired->execute($order, $type);
-            case 'cancelled':
-                return $this->cancelled->execute($order, $type);
-            case 'completed':
-                return $this->complete->execute($transaction, $order, $type);
-            case 'processing':
-                return $this->processing->execute($transaction, $order, $type);
-            default:
-                return $this->unknown->execute($order, $type, $status);
-        }
+        return $this->processUpdate($transaction, $order, $type);
     }
 }

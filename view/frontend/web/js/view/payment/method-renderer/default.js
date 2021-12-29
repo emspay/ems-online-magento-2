@@ -1,5 +1,5 @@
 /*
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,10 +15,10 @@ define(
         return Component.extend({
             redirectAfterPlaceOrder: false,
             defaults: {
-                template: 'EMSPay_Payment/payment/default'
+                template: 'GingerPay_Payment/payment/default'
             },
             afterPlaceOrder: function () {
-                window.location.replace(url.build('emspay/checkout/redirect/'));
+                window.location.replace(url.build('ginger/checkout/redirect/'));
             },
             getInstructions: function () {
                 return checkoutConfig[this.item.method].instructions;

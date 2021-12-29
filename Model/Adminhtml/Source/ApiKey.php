@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Model\Adminhtml\Source;
+namespace GingerPay\Payment\Model\Adminhtml\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
@@ -14,7 +14,6 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class ApiKey implements ArrayInterface
 {
-
     /**
      * Live/Test Key Array
      *

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Plugin\Framework\App\Request;
+namespace GingerPay\Payment\Plugin\Framework\App\Request;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Request\CsrfValidator;
@@ -29,7 +29,7 @@ class CsrfValidatorSkip
         RequestInterface $request,
         ActionInterface $action
     ) {
-        if ($request->getModuleName() == 'emspay') {
+        if ($request->getModuleName() == 'gingerpay') {
             return;
         }
 

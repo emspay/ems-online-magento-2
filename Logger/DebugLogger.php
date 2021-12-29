@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Logger;
+namespace GingerPay\Payment\Logger;
 
 use Monolog\Logger;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -22,7 +22,7 @@ class DebugLogger extends Logger
     private $json;
 
     /**
-     * EmsDebugLogger constructor.
+     * DebugLogger constructor.
      * @param Json $json
      * @param string $name
      * @param array $handlers
@@ -39,7 +39,7 @@ class DebugLogger extends Logger
     }
 
     /**
-     * Add debug data to EMS Log
+     * Add debug data to Log
      *
      * @param string $type
      * @param mixed $data

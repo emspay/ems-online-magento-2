@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Order;
+namespace GingerPay\Payment\Service\Order;
 
+use GingerPay\Payment\Redefiners\Service\ServiceOrderRedefiner;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\OrderRepository;
@@ -14,19 +15,8 @@ use Magento\Sales\Model\OrderRepository;
 /**
  * Get order by transaction service class
  */
-class GetOrderByTransaction
+class GetOrderByTransaction extends ServiceOrderRedefiner
 {
-
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
     /**
      * GetByTransaction constructor.
      *
@@ -42,7 +32,7 @@ class GetOrderByTransaction
     }
 
     /**
-     * Get Order by EMS Transaction ID
+     * Get Order by Transaction ID
      *
      * @param string $transactionId
      *
@@ -50,12 +40,6 @@ class GetOrderByTransaction
      */
     public function execute(string $transactionId)
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('emspay_transaction_id', $transactionId, 'eq')
-            ->setPageSize(1)
-            ->create();
-
-        $orders = $this->orderRepository->getList($searchCriteria)->getItems();
-        return reset($orders);
+        return $this->getOrderByTransaction($transactionId);
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Order;
+namespace GingerPay\Payment\Service\Order;
 
+use GingerPay\Payment\Redefiners\Service\ServiceOrderRedefiner;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,14 +17,8 @@ use Magento\Sales\Model\OrderRepository;
 /**
  * Update status service class
  */
-class UpdateStatus
+class UpdateStatus extends ServiceOrderRedefiner
 {
-
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
-
     /**
      * UpdateStatus constructor.
      *
@@ -31,7 +26,8 @@ class UpdateStatus
      */
     public function __construct(
         OrderRepository $orderRepository
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
     }
 
@@ -45,12 +41,6 @@ class UpdateStatus
      */
     public function execute(OrderInterface $order, string $status) : OrderInterface
     {
-        if ($order->getStatus() !== $status) {
-            $msg = __('Status updated from %1 to %2', $order->getStatus(), $status);
-            $order->addStatusToHistory($status, $msg, false);
-            $this->orderRepository->save($order);
-        }
-
-        return $order;
+       return $this->updateStatus($order, $status);
     }
 }

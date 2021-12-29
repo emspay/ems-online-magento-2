@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Order;
+namespace GingerPay\Payment\Service\Order;
 
+use GingerPay\Payment\Redefiners\Service\ServiceOrderRedefiner;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -14,19 +15,8 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 /**
  * Send Order Email service class
  */
-class SendOrderEmail
+class SendOrderEmail extends ServiceOrderRedefiner
 {
-
-    /**
-     * @var OrderSender
-     */
-    private $orderSender;
-
-    /**
-     * @var OrderCommentHistory
-     */
-    private $orderCommentHistory;
-
     /**
      * SendOrderEmail constructor.
      *
@@ -47,10 +37,6 @@ class SendOrderEmail
      */
     public function execute(OrderInterface $order)
     {
-        if (!$order->getEmailSent()) {
-            $this->orderSender->send($order);
-            $msg = __('Order email sent to %1', $order->getCustomerEmail());
-            $this->orderCommentHistory->add($order, $msg, true);
-        }
+        $this->sendOrderEmail($order);
     }
 }

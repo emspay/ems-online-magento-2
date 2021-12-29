@@ -1,27 +1,23 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Order;
+namespace GingerPay\Payment\Service\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use GingerPay\Payment\Redefiners\Service\ServiceOrderRedefiner;
+
 
 /**
  * Cancel order service class
  */
-class Cancel
+class Cancel extends ServiceOrderRedefiner
 {
-
-    /**
-     * @var ConfigRepository
-     */
-    private $configRepository;
-
     /**
      * Cancel constructor.
      *
@@ -29,7 +25,8 @@ class Cancel
      */
     public function __construct(
         ConfigRepository $configRepository
-    ) {
+    )
+    {
         $this->configRepository = $configRepository;
     }
 
@@ -40,14 +37,6 @@ class Cancel
      */
     public function execute(OrderInterface $order): bool
     {
-        if ($order->getId() && $order->getState() != Order::STATE_CANCELED) {
-            $comment = __("The order was canceled");
-            $this->configRepository->addTolog('info', $order->getIncrementId() . ' ' . $comment);
-            $order->registerCancellation($comment)->save();
-
-            return true;
-        }
-
-        return false;
+       return $this->cancel($order);
     }
 }

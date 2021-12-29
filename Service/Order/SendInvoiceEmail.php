@@ -1,39 +1,24 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Service\Order;
+namespace GingerPay\Payment\Service\Order;
 
+use GingerPay\Payment\Redefiners\Service\ServiceOrderRedefiner;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
 use Magento\Sales\Model\Order\Payment;
 
 /**
  * Send invoice email service class
  */
-class SendInvoiceEmail
+class SendInvoiceEmail extends ServiceOrderRedefiner
 {
-
-    /**
-     * @var InvoiceSender
-     */
-    private $invoiceSender;
-
-    /**
-     * @var ConfigRepository
-     */
-    private $configRepository;
-
-    /**
-     * @var OrderCommentHistory
-     */
-    private $orderCommentHistory;
-
     /**
      * SendInvoiceEmail constructor.
      *
@@ -58,17 +43,6 @@ class SendInvoiceEmail
      */
     public function execute(OrderInterface $order)
     {
-        /** @var Payment $payment */
-        $payment = $order->getPayment();
-        $method = $payment->getMethodInstance()->getCode();
-
-        $invoice = $payment->getCreatedInvoice();
-        $sendInvoice = $this->configRepository->sendInvoice($method, (int)$order->getStoreId());
-
-        if ($invoice && $sendInvoice && !$invoice->getEmailSent()) {
-            $this->invoiceSender->send($invoice);
-            $msg = __('Invoice email sent to %1', $order->getCustomerEmail());
-            $this->orderCommentHistory->add($order, $msg, true);
-        }
+       $this->sendInvoiceEmail($order);
     }
 }

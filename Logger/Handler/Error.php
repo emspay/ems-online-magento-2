@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ *All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Logger\Handler;
+namespace GingerPay\Payment\Logger\Handler;
 
 use Monolog\Logger;
 use Magento\Framework\Logger\Handler\Base;
@@ -24,5 +24,5 @@ class Error extends Base
     /**
      * @var string
      */
-    protected $fileName = '/var/log/emspay/error.log';
+    protected $fileName = '/var/log/gingerpay/error.log';
 }

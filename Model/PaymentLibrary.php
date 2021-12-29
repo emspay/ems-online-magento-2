@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Model;
+namespace GingerPay\Payment\Model;
 
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
-use EMSPay\Payment\Model\Api\GingerClient;
-use EMSPay\Payment\Model\Api\UrlProvider;
-use EMSPay\Payment\Service\Order\CustomerData;
-use EMSPay\Payment\Service\Order\GetOrderByTransaction;
-use EMSPay\Payment\Service\Order\OrderLines;
-use EMSPay\Payment\Service\Transaction\ProcessRequest as ProcessTransactionRequest;
-use EMSPay\Payment\Service\Transaction\ProcessUpdate as ProcessTransactionUpdate;
+use Exception;
+use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use GingerPay\Payment\Model\Api\GingerClient;
+use GingerPay\Payment\Model\Api\UrlProvider;
+use GingerPay\Payment\Service\Order\CustomerData;
+use GingerPay\Payment\Service\Order\GetOrderByTransaction;
+use GingerPay\Payment\Service\Order\OrderLines;
+use GingerPay\Payment\Service\Order\OrderDataCollector;
+use GingerPay\Payment\Service\Transaction\ProcessRequest as ProcessTransactionRequest;
+use GingerPay\Payment\Service\Transaction\ProcessUpdate as ProcessTransactionUpdate;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -35,11 +37,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 
 /**
- * Ems payment class
+ * PaymentLibrary payment class
  */
-class Ems extends AbstractMethod
+class PaymentLibrary extends AbstractMethod
 {
-
     /**
      * @var ConfigRepository
      */
@@ -64,6 +65,10 @@ class Ems extends AbstractMethod
      * @var OrderLines
      */
     public $orderLines;
+    /**
+     * @var OrderDataCollector
+     */
+    public $orderDataCollector;
     /**
      * @var ManagerInterface
      */
@@ -95,34 +100,34 @@ class Ems extends AbstractMethod
     /**
      * @var \Ginger\ApiClient
      */
-    private $client = null;
+    protected $client = null;
     /**
      * @var Order
      */
-    private $order;
+    protected $order;
     /**
      * @var GetOrderByTransaction
      */
-    private $getOrderByTransaction;
+    protected $getOrderByTransaction;
     /**
      * @var GingerClient
      */
-    private $gingerClient;
+    protected $gingerClient;
     /**
      * @var ProcessTransactionRequest
      */
-    private $processTransactionRequest;
+    protected $processTransactionRequest;
     /**
      * @var ProcessTransactionUpdate
      */
-    private $processTransactionUpdate;
+    protected $processTransactionUpdate;
     /**
      * @var UrlProvider
      */
-    private $urlProvider;
+    protected $urlProvider;
 
     /**
-     * Ems constructor.
+     * PaymentLibrary constructor.
      *
      * @param Context $context
      * @param Registry $registry
@@ -136,6 +141,7 @@ class Ems extends AbstractMethod
      * @param ProcessTransactionRequest $processTransactionRequest
      * @param ProcessTransactionUpdate $processTransactionUpdate
      * @param OrderLines $orderLines
+     * @param OrderDataCollector $orderDataCollector
      * @param CustomerData $customerData
      * @param Session $checkoutSession
      * @param Order $order
@@ -159,6 +165,7 @@ class Ems extends AbstractMethod
         ProcessTransactionRequest $processTransactionRequest,
         ProcessTransactionUpdate $processTransactionUpdate,
         OrderLines $orderLines,
+        OrderDataCollector $orderDataCollector,
         CustomerData $customerData,
         Session $checkoutSession,
         Order $order,
@@ -187,12 +194,63 @@ class Ems extends AbstractMethod
         $this->processTransactionUpdate = $processTransactionUpdate;
         $this->customerData = $customerData;
         $this->orderLines = $orderLines;
+        $this->orderDataCollector = $orderDataCollector;
         $this->checkoutSession = $checkoutSession;
         $this->order = $order;
         $this->getOrderByTransaction = $getOrderByTransaction;
         $this->urlProvider = $urlProvider;
         $this->messageManager = $messageManager;
     }
+
+    /**
+     * Set message about
+     *
+     * @param $quoteCurrency
+     *
+     */
+
+    public function inappropriateCurrencyReport($quoteCurrency)
+    {
+        $this->messageManager->addNotice('Payment '.$this->configRepository->getPaymentNameByMethodCode($this->method_code).' does not support '.$quoteCurrency);
+    }
+
+    /**
+     * @return bool|array
+     */
+
+    public function getAvailableCurrency()
+    {
+        $client = $this->loadGingerClient();
+
+        if(!$this->checkoutSession->getMultiCurrency())
+        {
+            try
+            {
+                $this->checkoutSession->setMultiCurrency($client->getCurrencyList());
+            }
+            catch (Exception $exception)
+            {
+                $this->checkoutSession->setMultiCurrency(null);
+            }
+        }
+
+        if($this->checkoutSession->getMultiCurrency())
+        {
+            if (array_key_exists($this->platform_code, $this->checkoutSession->getMultiCurrency()['payment_methods']))
+            {
+                return $this->checkoutSession->getMultiCurrency()['payment_methods'][$this->platform_code]['currencies'];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return ['EUR'];
+        }
+    }
+
 
     /**
      * Extra checks for method availability
@@ -213,7 +271,13 @@ class Ems extends AbstractMethod
             return false;
         }
 
-        if ($quote->getQuoteCurrencyCode() != 'EUR') {
+        $currencyForCurrentPayment = $this->getAvailableCurrency();
+
+        if (!$currencyForCurrentPayment) {
+            return false;
+        }
+
+        if (!in_array($quote->getQuoteCurrencyCode(), $currencyForCurrentPayment)) {
             return false;
         }
 
@@ -258,6 +322,7 @@ class Ems extends AbstractMethod
         }
 
         $order = $this->getOrderByTransaction->execute($transactionId);
+
         if (!$order) {
             $msg = ['error' => true, 'msg' => __('Order not found for transaction id: %1', $transactionId)];
             if ($type != 'webhook') {
@@ -268,28 +333,30 @@ class Ems extends AbstractMethod
 
         $storeId = (int)$order->getStoreId();
         $method = $order->getPayment()->getMethodInstance()->getCode();
+
         $testModus = $order->getPayment()->getAdditionalInformation();
         if (array_key_exists('test_modus', $testModus)) {
             $testModus = $testModus['test_modus'];
         }
+
         $testApiKey = $this->configRepository->getTestKey((string)$method, (int)$storeId, (string)$testModus);
 
         $client = $this->loadGingerClient($storeId, $testApiKey);
+
         if (!$client) {
             $msg = ['error' => true, 'msg' => __('Could not load Client')];
             $this->configRepository->addTolog('error', $msg);
             return $msg;
         }
 
-        $transaction = $client->getOrder($transactionId);
-        $this->configRepository->addTolog('process', $transaction);
+       $transaction = $client->getOrder($transactionId);
+       $this->configRepository->addTolog('process', $transaction);
 
         if (empty($transaction['id'])) {
             $msg = ['error' => true, 'msg' => __('Transaction not found')];
             $this->configRepository->addTolog('error', $msg);
             return $msg;
         }
-
         return $this->processTransactionUpdate->execute($transaction, $order, $type);
     }
 
@@ -331,14 +398,16 @@ class Ems extends AbstractMethod
         /** @var Order $order */
         $order = $payment->getOrder();
         $storeId = (int)$order->getStoreId();
-        $transactionId = $order->getEmspayTransactionId();
+        $transactionId = $order->getGingerpayTransactionId();
+
 
         $method = $order->getPayment()->getMethodInstance()->getCode();
         $testApiKey = $this->configRepository->getTestKey((string)$method, (int)$storeId);
 
         try {
             $client = $this->loadGingerClient($storeId, $testApiKey);
-            $emsOrder = $client->refundOrder(
+
+            $gingerOrder = $client->refundOrder(
                 $transactionId,
                 [
                     'amount' => $this->configRepository->getAmountInCents((float)$amount),
@@ -350,9 +419,8 @@ class Ems extends AbstractMethod
             $this->configRepository->addTolog('error', $errorMsg);
             throw new LocalizedException($errorMsg);
         }
-
-        if (in_array($emsOrder['status'], ['error', 'cancelled', 'expired'])) {
-            $reason = current($emsOrder['transactions'])['reason'] ?? 'Refund order is not completed';
+        if (in_array($gingerOrder['status'], ['error', 'cancelled', 'expired'])) {
+            $reason = current($gingerOrder['transactions'])['customer_message'] ?? 'Refund order is not completed';
             $errorMsg = __('Error: not possible to create an online refund: %1', $reason);
             $this->configRepository->addTolog('error', $errorMsg);
             throw new LocalizedException($errorMsg);
@@ -372,60 +440,33 @@ class Ems extends AbstractMethod
      */
     public function prepareTransaction(OrderInterface $order, $platformCode, $methodCode): array
     {
-        $orderData = [
-            'amount' => $this->configRepository->getAmountInCents((float)$order->getBaseGrandTotal()),
-            'currency' => $order->getOrderCurrencyCode(),
-            'description' => $this->configRepository->getDescription($order, $methodCode),
-            'merchant_order_id' => $order->getIncrementId(),
-            'return_url' => $this->getReturnUrl(),
-            'webhook_url' => $this->getWebhookUrl(),
-            'transactions' => [['payment_method' => $platformCode]],
-            'extra' => ['plugin' => $this->configRepository->getPluginVersion()]
-        ];
-
         $testModus = false;
         $testApiKey = null;
+        $custumerData = $this->customerData->get($order, $methodCode);
+        $issuer = null;
+
         switch ($platformCode) {
             case 'afterpay':
-                $orderData += [
-                    'order_lines' => $this->orderLines->get($order),
-                    'customer' => $this->customerData->get($order, $methodCode)
-                ];
                 $testApiKey = $this->configRepository->getAfterpayTestApiKey((int)$order->getStoreId());
                 $testModus = $testApiKey ? 'afterpay' : false;
                 break;
             case 'klarna-pay-later':
-                $orderData += [
-                    'order_lines' => $this->orderLines->get($order),
-                    'customer' => $this->customerData->get($order, $methodCode)
-                ];
                 $testApiKey = $this->configRepository->getKlarnaTestApiKey((int)$order->getStoreId());
                 $testModus = $testApiKey ? 'klarna' : false;
                 break;
-            case 'klarna-pay-now':
-            case 'tikkie-payment-request':
-            case 'payconiq':
-            case 'amex':
-                $orderData['customer'] = $this->customerData->get($order, $methodCode);
-                break;
             case 'ideal':
-                $issuer = null;
                 $additionalData = $order->getPayment()->getAdditionalInformation();
-
-                if (isset($additionalData['issuer'])) {
+                if (isset($additionalData['issuer']))
+                {
                     $issuer = $additionalData['issuer'];
                 }
-                $orderData['transactions'] = [
-                    [
-                        'payment_method' => $platformCode,
-                        'payment_method_details' => ['issuer_id' => $issuer]
-                    ]
-                ];
                 break;
         }
+        $orderData = $this->orderDataCollector->collectDataForOrder($order, $platformCode, $methodCode, $this->urlProvider, $this->orderLines, $custumerData, $issuer);
 
         $client = $this->loadGingerClient((int)$order->getStoreId(), $testApiKey);
         $transaction = $client->createOrder($orderData);
+
         return $this->processRequest($order, $transaction, $testModus);
     }
 

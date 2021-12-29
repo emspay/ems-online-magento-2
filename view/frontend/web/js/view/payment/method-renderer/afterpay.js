@@ -1,5 +1,5 @@
 /*
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,7 +7,7 @@ define(
     [
         'ko',
         'jquery',
-        'EMSPay_Payment/js/view/payment/method-renderer/default',
+        'GingerPay_Payment/js/view/payment/method-renderer/default',
         'Magento_Checkout/js/model/quote'
     ],
     function (ko, $, Component, quote) {
@@ -16,7 +16,7 @@ define(
         return Component.extend(
             {
                 defaults: {
-                    template: 'EMSPay_Payment/payment/afterpay',
+                    template: 'GingerPay_Payment/payment/afterpay',
                     selectedPrefix: null
                 },
                 getCustomerPrefixes: function () {
@@ -39,7 +39,7 @@ define(
                     return ko.observable(new Date(dob));
                 },
                 validate: function () {
-                    var form = $('#emspay_methods_afterpay-form');
+                    var form = $('#ginger_methods_afterpay-form');
                     return form.validation() && form.validation('isValid');
                 },
                 getData: function () {

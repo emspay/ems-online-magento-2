@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Block\Info;
+namespace GingerPay\Payment\Block\Info;
 
 use Magento\Payment\Block\Info;
 use Magento\Framework\Exception\LocalizedException;
@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Klarna info class
  */
-class Klarna extends Info
+class KlarnaPayLater extends Info
 {
 
     /**
@@ -24,7 +24,7 @@ class Klarna extends Info
     /**
      * @var string
      */
-    protected $_template = 'EMSPay_Payment::info/klarna.phtml';
+    protected $_template = 'GingerPay_Payment::info/klarnapaylater.phtml';
 
     /**
      * @return mixed

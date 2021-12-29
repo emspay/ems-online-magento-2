@@ -1,45 +1,54 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright © Magmodules.eu. All rights reserved.
+  ~ All rights reserved.
   ~ See COPYING.txt for license details.
   -->
 <payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
     <methods>
-        <method name="emspay_methods_ideal">
+        <method name="ginger_methods_ideal">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_creditcard">
+        <method name="ginger_methods_creditcard">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_applepay">
+        <method name="ginger_methods_applepay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_bancontact">
+        <method name="ginger_methods_bancontact">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_banktransfer">
+        <method name="ginger_methods_banktransfer">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_klarnadirect">
+        <method name="ginger_methods_klarnapaynow">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_paypal">
+        <method name="ginger_methods_paypal">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_amex">
+        <method name="ginger_methods_amex">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_klarna">
+        <method name="ginger_methods_klarnapaylater">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_payconiq">
+        <method name="ginger_methods_payconiq">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_afterpay">
+        <method name="ginger_methods_afterpay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="emspay_methods_tikie">
+        <method name="ginger_methods_tikie">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="ginger_methods_googlepay">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="ginger_methods_sofort">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="ginger_methods_klarnadirectdebit">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
     </methods>

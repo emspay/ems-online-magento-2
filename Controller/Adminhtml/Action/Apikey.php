@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magmodules.eu. All rights reserved.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace EMSPay\Payment\Controller\Adminhtml\Action;
+namespace GingerPay\Payment\Controller\Adminhtml\Action;
 
-use EMSPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
-use EMSPay\Payment\Model\Api\GingerClient;
+use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
+use GingerPay\Payment\Model\Api\GingerClient;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
@@ -24,7 +24,7 @@ class Apikey extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'EMSPay_Payment::config';
+    const ADMIN_RESOURCE = 'GingerPay_Payment::config';
 
     /**
      * @var RequestInterface
@@ -76,7 +76,7 @@ class Apikey extends Action
         $result = $this->resultJsonFactory->create();
 
         if (!class_exists('Ginger\ApiClient')) {
-            $apiErrorMsg = ['<span class="ems-error">' . __('Could not load Ginger client!') . '</span>'];
+            $apiErrorMsg = ['<span class="ginger-error">' . __('Could not load Ginger client!') . '</span>'];
             $result->setData(['success' => false, 'msg' => $apiErrorMsg]);
             return $result;
         }
@@ -84,14 +84,14 @@ class Apikey extends Action
         try {
             $client = $this->client->get((int)$storeId, $apiKey);
             if (!$client) {
-                $results[] = '<span class="ems-error">' . __('Error! Invalid API Key.') . '</span>';
+                $results[] = '<span class="ginger-error">' . __('Error! '.$apiKey.'Invalid API Key.') . '</span>';
                 $success = false;
             } else {
                 $client->getIdealIssuers();
-                $results[] = '<span class="ems-success">' . __('Success!') . '</span>';
+                $results[] = '<span class="ginger-success">' . __('Success!') . '</span>';
             }
         } catch (\Exception $e) {
-            $results[] = '<span class="ems-error">' . $e->getMessage() . '</span>';
+            $results[] = '<span class="ginger-error">' . $e->getMessage() . '</span>';
             $this->configRepository->addTolog('error', $e->getMessage());
             $success = false;
         }
