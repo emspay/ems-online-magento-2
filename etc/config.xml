@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright © Magmodules.eu. All rights reserved.
+  ~ All rights reserved.
   ~ See COPYING.txt for license details.
   -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <emspay_general>
-                <version>v1.0.5</version>
+            <ginger_general>
+                <version>VERSION_HERE</version>
                 <active>0</active>
                 <enabled>0</enabled>
                 <type>test</type>
                 <payment_images>1</payment_images>
                 <debug>1</debug>
                 <apikey backend_model="Magento\Config\Model\Config\Backend\Encrypted"></apikey>
-                <model>EMSPay\Payment\Model\Methods\General</model>
+                <model>GingerPay\Payment\Model\Methods\General</model>
                 <observer>1</observer>
-            </emspay_general>
-            <emspay_methods_banktransfer>
+            </ginger_general>
+            <ginger_methods_banktransfer>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Banktransfer</model>
+                <model>GingerPay\Payment\Model\Methods\Banktransfer</model>
                 <title>Banktransfer</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -36,10 +36,10 @@
                     <holder>THIRD PARTY FUNDS EMS</holder>
                     <city>Amsterdam, NL</city>
                 </account_details>
-            </emspay_methods_banktransfer>
-            <emspay_methods_creditcard>
+            </ginger_methods_banktransfer>
+            <ginger_methods_creditcard>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Creditcard</model>
+                <model>GingerPay\Payment\Model\Methods\Creditcard</model>
                 <title>Credit Cards</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -49,10 +49,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_creditcard>
-            <emspay_methods_applepay>
+            </ginger_methods_creditcard>
+            <ginger_methods_applepay>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\ApplePay</model>
+                <model>GingerPay\Payment\Model\Methods\ApplePay</model>
                 <title>Apple Pay</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -62,10 +62,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_applepay>
-            <emspay_methods_ideal>
+            </ginger_methods_applepay>
+            <ginger_methods_ideal>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Ideal</model>
+                <model>GingerPay\Payment\Model\Methods\Ideal</model>
                 <title>iDeal</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -75,10 +75,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_ideal>
-            <emspay_methods_bancontact>
+            </ginger_methods_ideal>
+            <ginger_methods_bancontact>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Bancontact</model>
+                <model>GingerPay\Payment\Model\Methods\Bancontact</model>
                 <title>Bancontact</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -88,11 +88,11 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_bancontact>
-            <emspay_methods_klarnadirect>
+            </ginger_methods_bancontact>
+            <ginger_methods_klarnapaynow>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\KlarnaDirect</model>
-                <title>Klarna Direct</title>
+                <model>GingerPay\Payment\Model\Methods\KlarnaPayNow</model>
+                <title>Klarna Pay Now</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -101,10 +101,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_klarnadirect>
-            <emspay_methods_paypal>
+            </ginger_methods_klarnapaynow>
+            <ginger_methods_paypal>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Paypal</model>
+                <model>GingerPay\Payment\Model\Methods\Paypal</model>
                 <title>Paypal</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -114,10 +114,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_paypal>
-            <emspay_methods_amex>
+            </ginger_methods_paypal>
+            <ginger_methods_amex>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Amex</model>
+                <model>GingerPay\Payment\Model\Methods\Amex</model>
                 <title>American Express</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -127,11 +127,11 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_amex>
-            <emspay_methods_klarna>
+            </ginger_methods_amex>
+            <ginger_methods_klarnapaylater>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Klarna</model>
-                <title>Klarna</title>
+                <model>GingerPay\Payment\Model\Methods\KlarnaPayLater</model>
+                <title>Klarna Pay Later</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -140,10 +140,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_klarna>
-            <emspay_methods_payconiq>
+            </ginger_methods_klarnapaylater>
+            <ginger_methods_payconiq>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Payconiq</model>
+                <model>GingerPay\Payment\Model\Methods\Payconiq</model>
                 <title>Payconiq</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -153,10 +153,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_payconiq>
-            <emspay_methods_tikkie>
+            </ginger_methods_payconiq>
+            <ginger_methods_tikkie>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Tikkie</model>
+                <model>GingerPay\Payment\Model\Methods\Tikkie</model>
                 <title>Tikkie</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -166,10 +166,10 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_tikkie>
-            <emspay_methods_afterpay>
+            </ginger_methods_tikkie>
+            <ginger_methods_afterpay>
                 <active>1</active>
-                <model>EMSPay\Payment\Model\Methods\Afterpay</model>
+                <model>GingerPay\Payment\Model\Methods\Afterpay</model>
                 <title>Afterpay</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
@@ -179,7 +179,46 @@
                 <payment_action>order</payment_action>
                 <allowspecific>0</allowspecific>
                 <instructions/>
-            </emspay_methods_afterpay>
+            </ginger_methods_afterpay>
+            <ginger_methods_googlepay>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\Googlepay</model>
+                <title>Google Pay</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_googlepay>
+            <ginger_methods_sofort>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\Sofort</model>
+                <title>Sofort</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_sofort>
+            <ginger_methods_klarnadirectdebit>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\KlarnaDirectDebit</model>
+                <title>Klarna Direct Debit</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_klarnadirectdebit>
         </payment>
     </default>
 </config>
