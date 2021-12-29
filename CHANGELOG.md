@@ -30,7 +30,7 @@ Magento 2 2.0.0
 
 * iDEAL issuer default value translation
 
-## Changes in version 1.1.0
+## Changes in version 2.0.0
 
 * Refactored code to handle GPE solution.
 * Unified bank labels to handle GPE solution.
