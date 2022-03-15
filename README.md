@@ -1,7 +1,7 @@
 # EMS Online plugin for Magento 2
 
 ## About
-This is the offical EMS Online plugin.
+This is the official EMS Online plugin.
 
 EMS helps entrepreneurs with the best, smartest and most efficient payment systems. Both 
 in your physical store and online in your webshop. With a wide range of payment methods 
