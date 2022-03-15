@@ -1,4 +1,4 @@
-Magento 2 2.0.0
+Magento 2 2.0.1
 ------------------------------   
 
 # Changelog #
@@ -40,4 +40,8 @@ Magento 2 2.0.0
 * Added function which adaptively returns a message using 'customer_message'.
 * Added test which check is project structure correct using PHPUnit extension to check GPE solution on step GitHub actions.
 * Added test which check order creating using PHPUnit extension to check that latest changes doesn't crash the main functionality.
+
+## Changes in version 2.0.1
+
+* Fixed case when orderRepository have not order
 
