@@ -17,6 +17,7 @@ use GingerPay\Payment\Service\Order\OrderLines;
 use GingerPay\Payment\Service\Order\OrderDataCollector;
 use GingerPay\Payment\Service\Transaction\ProcessRequest as ProcessTransactionRequest;
 use GingerPay\Payment\Service\Transaction\ProcessUpdate as ProcessTransactionUpdate;
+use GingerPay\Payment\Model\Cache\MulticurrencyCacheRepository;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -49,6 +50,10 @@ class PaymentLibrary extends AbstractMethod
      * @var Session
      */
     public $checkoutSession;
+    /**
+     * @var MulticurrencyCacheRepository
+     */
+    public $multicurrencyCacheRepository;
     /**
      * @var string
      */
@@ -144,6 +149,7 @@ class PaymentLibrary extends AbstractMethod
      * @param OrderDataCollector $orderDataCollector
      * @param CustomerData $customerData
      * @param Session $checkoutSession
+     * @param MulticurrencyCacheRepository $multicurrencyCacheRepository
      * @param Order $order
      * @param GetOrderByTransaction $getOrderByTransaction
      * @param UrlProvider $urlProvider
@@ -168,6 +174,7 @@ class PaymentLibrary extends AbstractMethod
         OrderDataCollector $orderDataCollector,
         CustomerData $customerData,
         Session $checkoutSession,
+        MulticurrencyCacheRepository $multicurrencyCacheRepository,
         Order $order,
         GetOrderByTransaction $getOrderByTransaction,
         UrlProvider $urlProvider,
@@ -196,6 +203,7 @@ class PaymentLibrary extends AbstractMethod
         $this->orderLines = $orderLines;
         $this->orderDataCollector = $orderDataCollector;
         $this->checkoutSession = $checkoutSession;
+        $this->multicurrencyCacheRepository = $multicurrencyCacheRepository;
         $this->order = $order;
         $this->getOrderByTransaction = $getOrderByTransaction;
         $this->urlProvider = $urlProvider;
@@ -222,30 +230,17 @@ class PaymentLibrary extends AbstractMethod
     {
         $client = $this->loadGingerClient();
 
-        if(!$this->checkoutSession->getMultiCurrency())
+        try
         {
-            try
+            $multicurrencyArray = $this->multicurrencyCacheRepository->getAvailablePayments($client);
+            if (array_key_exists($this->platform_code, $multicurrencyArray['payment_methods']))
             {
-                $this->checkoutSession->setMultiCurrency($client->getCurrencyList());
+                return $multicurrencyArray['payment_methods'][$this->platform_code]['currencies'];
             }
-            catch (Exception $exception)
-            {
-                $this->checkoutSession->setMultiCurrency(null);
-            }
-        }
 
-        if($this->checkoutSession->getMultiCurrency())
-        {
-            if (array_key_exists($this->platform_code, $this->checkoutSession->getMultiCurrency()['payment_methods']))
-            {
-                return $this->checkoutSession->getMultiCurrency()['payment_methods'][$this->platform_code]['currencies'];
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-        else
+        catch (Exception $exception)
         {
             return ['EUR'];
         }

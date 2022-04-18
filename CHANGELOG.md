@@ -1,4 +1,4 @@
-Magento 2 2.0.1
+Magento 2 2.0.2
 ------------------------------   
 
 # Changelog #
@@ -44,4 +44,8 @@ Magento 2 2.0.1
 ## Changes in version 2.0.1
 
 * Fixed case when orderRepository have not order
+
+## Changes in version 2.0.2
+
+* Changed way of caching Multi-Currency array and added the ability to sync it
 

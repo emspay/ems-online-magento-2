@@ -14,6 +14,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use GingerPay\Payment\Model\Cache\MulticurrencyCacheRepository;
 
 /**
  * Apikey controller class
@@ -42,6 +43,10 @@ class Apikey extends Action
      * @var ConfigRepository
      */
     private $configRepository;
+    /**
+     * @var MulticurrencyCacheRepository
+     */
+    public $multicurrencyCacheRepository;
 
     /**
      * Apikey constructor.
@@ -50,17 +55,20 @@ class Apikey extends Action
      * @param JsonFactory $resultJsonFactory
      * @param ConfigRepository $configRepository
      * @param GingerClient $client
+     * @param MulticurrencyCacheRepository $multicurrencyCacheRepository
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
         ConfigRepository $configRepository,
-        GingerClient $client
+        GingerClient $client,
+        MulticurrencyCacheRepository $multicurrencyCacheRepository
     ) {
         $this->request = $context->getRequest();
         $this->resultJsonFactory = $resultJsonFactory;
         $this->configRepository = $configRepository;
         $this->client = $client;
+        $this->multicurrencyCacheRepository = $multicurrencyCacheRepository;
         parent::__construct($context);
     }
 
@@ -88,6 +96,7 @@ class Apikey extends Action
                 $success = false;
             } else {
                 $client->getIdealIssuers();
+                $this->multicurrencyCacheRepository->set($client);
                 $results[] = '<span class="ginger-success">' . __('Success!') . '</span>';
             }
         } catch (\Exception $e) {
