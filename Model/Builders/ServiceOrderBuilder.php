@@ -203,12 +203,17 @@ class ServiceOrderBuilder
      * @return array
      */
 
-    public function getTransactions($platformCode, $issuer_id = null)
+    public function getTransactions($platformCode, $issuer_id = null, $verifiedTermsOfService = null)
     {
         return [
             array_filter([
                 "payment_method"         => $platformCode,
-                "payment_method_details" => array_filter(["issuer_id" => $issuer_id])
+                "payment_method_details" => array_filter(
+                    [
+                        "issuer_id" => $issuer_id,
+                        "verified_terms_of_service" => $verifiedTermsOfService
+                    ]
+                )
             ])
         ];
     }
@@ -219,7 +224,7 @@ class ServiceOrderBuilder
      * @return array
      */
 
-    public function collectDataForOrder($order, $platformCode, $methodCode, $urlProvider, $orderLines, $customerData = null, $issuer = null)
+    public function collectDataForOrder($order, $methodCode, $urlProvider, $orderLines, $paymentDetails, $customerData = null)
     {
         $orderData = array_filter([
             'amount' => $this->configRepository->getAmountInCents((float)$order->getBaseGrandTotal()),
@@ -228,7 +233,7 @@ class ServiceOrderBuilder
             'merchant_order_id' => $order->getIncrementId(),
             'return_url' => $urlProvider->getReturnUrl(),
             'webhook_url' => $urlProvider->getWebhookUrl(),
-            'transactions' => $this->getTransactions($platformCode, $issuer),
+            'transactions' => $paymentDetails,
             'extra' => $this->getExtraLines(),
             'order_lines' => $orderLines->get($order),
             'customer' => $customerData

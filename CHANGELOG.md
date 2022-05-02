@@ -1,4 +1,4 @@
-Magento 2 2.0.2
+Magento 2 2.0.3
 ------------------------------   
 
 # Changelog #
@@ -48,4 +48,9 @@ Magento 2 2.0.2
 ## Changes in version 2.0.2
 
 * Changed way of caching Multi-Currency array and added the ability to sync it
+
+## Changes in version 2.0.3
+
+* Added skip terms and condition page for AfterPay
+* Fixed a case where the webhook did not work
 

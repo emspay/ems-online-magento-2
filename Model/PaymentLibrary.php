@@ -330,8 +330,11 @@ class PaymentLibrary extends AbstractMethod
         $method = $order->getPayment()->getMethodInstance()->getCode();
 
         $testModus = $order->getPayment()->getAdditionalInformation();
+
         if (array_key_exists('test_modus', $testModus)) {
             $testModus = $testModus['test_modus'];
+        } else {
+            $testModus = '';
         }
 
         $testApiKey = $this->configRepository->getTestKey((string)$method, (int)$storeId, (string)$testModus);
@@ -439,11 +442,19 @@ class PaymentLibrary extends AbstractMethod
         $testApiKey = null;
         $custumerData = $this->customerData->get($order, $methodCode);
         $issuer = null;
+        $verifiedTermsOfService = null;
+
+        $additionalData = $order->getPayment()->getAdditionalInformation();
 
         switch ($platformCode) {
             case 'afterpay':
                 $testApiKey = $this->configRepository->getAfterpayTestApiKey((int)$order->getStoreId());
                 $testModus = $testApiKey ? 'afterpay' : false;
+
+                if (isset($additionalData['terms']))
+                {
+                    ($additionalData['terms'] == 1) ?  $verifiedTermsOfService = true : $verifiedTermsOfService = false;
+                }
                 break;
             case 'klarna-pay-later':
                 $testApiKey = $this->configRepository->getKlarnaTestApiKey((int)$order->getStoreId());
@@ -457,7 +468,10 @@ class PaymentLibrary extends AbstractMethod
                 }
                 break;
         }
-        $orderData = $this->orderDataCollector->collectDataForOrder($order, $platformCode, $methodCode, $this->urlProvider, $this->orderLines, $custumerData, $issuer);
+
+        $paymentDetails = $this->orderDataCollector->getTransactions($platformCode, $issuer, $verifiedTermsOfService);
+
+        $orderData = $this->orderDataCollector->collectDataForOrder($order, $methodCode, $this->urlProvider, $this->orderLines, $paymentDetails, $custumerData);
 
         $client = $this->loadGingerClient((int)$order->getStoreId(), $testApiKey);
         $transaction = $client->createOrder($orderData);
