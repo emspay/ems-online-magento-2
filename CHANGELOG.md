@@ -1,4 +1,4 @@
-Magento 2 2.0.3
+Magento 2 2.0.4
 ------------------------------   
 
 # Changelog #
@@ -53,4 +53,8 @@ Magento 2 2.0.3
 
 * Added skip terms and condition page for AfterPay
 * Fixed a case where the webhook did not work
+
+## Changes in version 2.0.4
+
+* Fixed duplication of order confirmation email
 

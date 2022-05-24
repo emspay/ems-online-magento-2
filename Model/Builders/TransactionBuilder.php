@@ -338,13 +338,17 @@ class TransactionBuilder
         $payment = $order->getPayment();
         if (!$payment->getIsTransactionClosed() && $type == 'webhook') {
             $order = $this->captureOrderTransaction($order, $transaction);
-            $this->sendOrderEmail->execute($order);
             $this->sendInvoiceEmail->execute($order);
 
             $method = $this->getMethodFromOrder($order);
             $status = $this->configRepository->getStatusProcessing($method, (int)$order->getStoreId());
 
             $this->updateStatus->execute($order, $status);
+        }
+
+        if ($type != 'webhook') {
+            $this->sendOrderEmail->execute($order);
+            $this->sendInvoiceEmail->execute($order);
         }
 
         if ($type == 'success') {
@@ -354,10 +358,6 @@ class TransactionBuilder
                 ->setLastOrderId($order->getEntityId());
             $this->invoice->createInvoice($order, $transaction);
         }
-
-
-
-
 
         $result = [
             'success' => true,
@@ -451,9 +451,16 @@ class TransactionBuilder
      */
     public function processing(array $transaction, OrderInterface $order, string $type): array
     {
+        $method = $order->getPayment()->getMethodInstance()->getCode();
+
         if ($type == 'webhook') {
             $order = $this->updateOrderTransaction($order, $transaction, Transaction::TYPE_AUTH);
-            $this->sendOrderEmail->execute($order);
+        }
+
+        if ($type != 'webhook') {
+            if ($method == Banktransfer::METHOD_CODE) {
+                $this->sendOrderEmail->execute($order);
+            }
         }
 
         $result = [

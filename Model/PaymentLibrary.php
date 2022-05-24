@@ -355,6 +355,7 @@ class PaymentLibrary extends AbstractMethod
             $this->configRepository->addTolog('error', $msg);
             return $msg;
         }
+
         return $this->processTransactionUpdate->execute($transaction, $order, $type);
     }
 
