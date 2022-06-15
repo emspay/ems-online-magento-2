@@ -154,19 +154,6 @@
                 <allowspecific>0</allowspecific>
                 <instructions/>
             </ginger_methods_payconiq>
-            <ginger_methods_tikkie>
-                <active>1</active>
-                <model>GingerPay\Payment\Model\Methods\Tikkie</model>
-                <title>Tikkie</title>
-                <description>Your order %id% at %name%</description>
-                <order_status_pending>pending_payment</order_status_pending>
-                <generate_invoice>1</generate_invoice>
-                <order_status_processing>processing</order_status_processing>
-                <invoice_notify>1</invoice_notify>
-                <payment_action>order</payment_action>
-                <allowspecific>0</allowspecific>
-                <instructions/>
-            </ginger_methods_tikkie>
             <ginger_methods_afterpay>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\Afterpay</model>
@@ -193,32 +180,6 @@
                 <allowspecific>0</allowspecific>
                 <instructions/>
             </ginger_methods_googlepay>
-            <ginger_methods_sofort>
-                <active>1</active>
-                <model>GingerPay\Payment\Model\Methods\Sofort</model>
-                <title>Sofort</title>
-                <description>Your order %id% at %name%</description>
-                <order_status_pending>pending_payment</order_status_pending>
-                <generate_invoice>1</generate_invoice>
-                <order_status_processing>processing</order_status_processing>
-                <invoice_notify>1</invoice_notify>
-                <payment_action>order</payment_action>
-                <allowspecific>0</allowspecific>
-                <instructions/>
-            </ginger_methods_sofort>
-            <ginger_methods_klarnadirectdebit>
-                <active>1</active>
-                <model>GingerPay\Payment\Model\Methods\KlarnaDirectDebit</model>
-                <title>Klarna Direct Debit</title>
-                <description>Your order %id% at %name%</description>
-                <order_status_pending>pending_payment</order_status_pending>
-                <generate_invoice>1</generate_invoice>
-                <order_status_processing>processing</order_status_processing>
-                <invoice_notify>1</invoice_notify>
-                <payment_action>order</payment_action>
-                <allowspecific>0</allowspecific>
-                <instructions/>
-            </ginger_methods_klarnadirectdebit>
         </payment>
     </default>
 </config>
