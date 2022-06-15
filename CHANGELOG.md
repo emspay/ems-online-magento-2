@@ -1,4 +1,4 @@
-Magento 2 2.0.4
+Magento 2 2.0.5
 ------------------------------   
 
 # Changelog #
@@ -57,4 +57,9 @@ Magento 2 2.0.4
 ## Changes in version 2.0.4
 
 * Fixed duplication of order confirmation email
+
+## Changes in version 2.0.5
+
+* Fixed loggers crashing for Magento 2.4.4
+* Fixed error while initialization of transaction 
 

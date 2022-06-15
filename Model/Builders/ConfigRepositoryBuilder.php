@@ -158,10 +158,11 @@ class ConfigRepositoryBuilder extends ApiBuilder implements ConfigRepositoryInte
         $storeId = (int)$order->getStoreId();
 
         $description = ($this->getStoreConfig($path = 'payment/' . $method . '/description', $storeId));
-        $description = str_replace('%id%', $order->getIncrementId(), $description);
+        $description = str_ireplace('%id%', $order->getIncrementId(), $description);
 
         $storeName = $this->getStoreConfig(self::XML_PATH_STORE_NAME, $storeId);
-        $description = str_replace('%name%', $storeName, $description);
+        $storeName = $storeName ?? __('our shop');
+        $description = str_ireplace('%name%', $storeName, $description);
 
         return $description;
     }

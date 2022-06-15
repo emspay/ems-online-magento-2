@@ -30,11 +30,11 @@ The ideal online payment page for your webshop:
 
 ## Version number                 
  
-* Latest version 2.0.4
+* Latest version 2.0.5
  
 ## Requirements:       
-- PHP v7.0 to v7.4
-- Magento v2.2.x to v2.4.3
+- PHP v7.0 to v8.1
+- Magento v2.2.x to v2.4.4
                               
 ## Supported methods ##
 * Afterpay
