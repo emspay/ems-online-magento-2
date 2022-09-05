@@ -1,4 +1,4 @@
-Magento 2 2.0.5
+Magento 2 2.0.6
 ------------------------------   
 
 # Changelog #
@@ -62,4 +62,8 @@ Magento 2 2.0.5
 
 * Fixed loggers crashing for Magento 2.4.4
 * Fixed error while initialization of transaction 
+
+## Changes in version 2.0.6
+
+* Fixed datepickers for Magento 2.4.5
 

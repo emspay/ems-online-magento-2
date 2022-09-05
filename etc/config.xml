@@ -8,7 +8,7 @@
     <default>
         <payment>
             <ginger_general>
-                <version>2.0.5</version>
+                <version>2.0.6</version>
                 <active>0</active>
                 <enabled>0</enabled>
                 <type>test</type>
@@ -180,6 +180,45 @@
                 <allowspecific>0</allowspecific>
                 <instructions/>
             </ginger_methods_googlepay>
+            <ginger_methods_giropay>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\GiroPay</model>
+                <title>GiroPay</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_giropay>
+            <ginger_methods_mobilepay>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\MobilePay</model>
+                <title>MobilePay</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_mobilepay>
+            <ginger_methods_swish>
+                <active>1</active>
+                <model>GingerPay\Payment\Model\Methods\Swish</model>
+                <title>Swish</title>
+                <description>Your order %id% at %name%</description>
+                <order_status_pending>pending_payment</order_status_pending>
+                <generate_invoice>1</generate_invoice>
+                <order_status_processing>processing</order_status_processing>
+                <invoice_notify>1</invoice_notify>
+                <payment_action>order</payment_action>
+                <allowspecific>0</allowspecific>
+                <instructions/>
+            </ginger_methods_swish>
         </payment>
     </default>
 </config>

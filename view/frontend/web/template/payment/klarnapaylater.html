@@ -41,7 +41,11 @@
                     <span><!-- ko i18n: 'Date of Birth'--><!-- /ko --></span>
                 </label>
                 <div class="control">
-                    <input type="text" name="payment[dob]" class="input-text" style="width: 250px" placeholder="YYYY-MM-DD" data-validate="{required:true}" data-bind="attr: {'id': getCode() + '_dob'}, datepicker: { storage: getDob(), options: { changeMonth: true, changeYear: true, showButtonPanel: true, dateFormat: 'yy-MM-dd', yearRange: '-120y:c+nn', buttonText: 'Select Date'} }">
+                    <input type="date" id="start" name="payment[dob]"
+                           data-validate="{required:true}"
+                           style="width: 250px" placeholder="YYYY-MM-DD"
+                           data-bind="attr: {'id': getCode() + '_dob'}"
+                           >
                 </div>
             </div>
         </form>
@@ -59,8 +63,7 @@
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
                         css: {disabled: !isPlaceOrderActionAllowed()},
-                        enable: (getCode() == isChecked())
-                "
+                        enable: (getCode() == isChecked())"
                         disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
