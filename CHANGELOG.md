@@ -1,4 +1,4 @@
-Magento 2 2.0.6
+Magento 2 2.0.7
 ------------------------------   
 
 # Changelog #
@@ -67,7 +67,7 @@ Magento 2 2.0.6
 
 * Fixed datepickers for Magento 2.4.5
 
-## Changes in version 2.0.7
+## Changes in version 2.0.7 
 
 * Fixed order invoice duplication
 
