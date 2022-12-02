@@ -355,10 +355,7 @@ class TransactionBuilder
             $this->checkoutSession->setLastQuoteId($order->getQuoteId())
                 ->setLastSuccessQuoteId($order->getQuoteId())
                 ->setLastRealOrderId($order->getIncrementId())
-                ->setLastOrderId($order->getEntityId());
-            if (!$order->hasInvoices()) {
-                $this->invoice->createInvoice($order, $transaction);
-            }
+                ->setLastOrderId($order->getEntityId());          
         }
 
         $result = [
