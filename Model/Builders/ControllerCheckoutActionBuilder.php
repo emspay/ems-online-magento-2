@@ -166,6 +166,7 @@ class ControllerCheckoutActionBuilder extends Action
         if (isset($input['order_id'])) {
             try {
                 $this->paymentLibraryModel->processTransaction($input['order_id'], 'webhook');
+                exit(200);
             } catch (\Exception $e) {
                 $this->configRepository->addTolog('error', $e->getMessage());
                 $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);

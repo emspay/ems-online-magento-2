@@ -1,4 +1,4 @@
-Magento 2 2.0.7
+Magento 2 2.0.8
 ------------------------------   
 
 # Changelog #
@@ -71,3 +71,7 @@ Magento 2 2.0.7
 
 * Fixed order invoice duplication
 
+## Changes in version 2.0.8
+
+* Fixed wrong order state
+* Fixed case when total paid amount was unpaid

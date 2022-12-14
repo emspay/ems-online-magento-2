@@ -187,14 +187,14 @@ class TransactionBuilder
     public function captureOrderTransaction(
         OrderInterface $order,
         array $transaction
-    ): OrderInterface {
+    ) {
 
         /** @var Payment $payment */
         $payment = $order->getPayment();
         if ($order->hasInvoices() || $payment->getAmountPaid()) {
             $errorMsg = __('Order %1 already invoiced/paid, no need for capture', $order->getIncrementId());
             $this->configRepository->addTolog('error', $errorMsg);
-            return $order;
+            return $this->unknown($order, 'invoice_error', 'completed');
         }
 
         $payment->setTransactionId($transaction['id']);
@@ -338,17 +338,18 @@ class TransactionBuilder
         $payment = $order->getPayment();
         if (!$payment->getIsTransactionClosed() && $type == 'webhook') {
             $order = $this->captureOrderTransaction($order, $transaction);
+            
+             if (is_array($order)) {
+                return $order;
+            }
+            
             $this->sendInvoiceEmail->execute($order);
+            $this->sendOrderEmail->execute($order);
 
             $method = $this->getMethodFromOrder($order);
             $status = $this->configRepository->getStatusProcessing($method, (int)$order->getStoreId());
 
             $this->updateStatus->execute($order, $status);
-        }
-
-        if ($type != 'webhook') {
-            $this->sendOrderEmail->execute($order);
-            $this->sendInvoiceEmail->execute($order);
         }
 
         if ($type == 'success') {
