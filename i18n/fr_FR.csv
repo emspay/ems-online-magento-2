@@ -107,4 +107,4 @@
 "Please select your gender","S'il vous plait selectionnez votre genre"
 "Enter your date of birth","Entrez votre date de naissance"
 "our shop","notre boutique"
-
+"Some payments will be missing. To use them, set %1 in Stores -> Configuration -> General -> Currency setup", "Certains paiements seront manquants. Pour les utiliser, définissez %1 dans Stores -> Configuration -> General -> Currency setup"
