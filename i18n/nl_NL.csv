@@ -107,5 +107,5 @@
 "Please select your gender","Selecteer alstublieft uw geslacht"
 "Enter your date of birth","Vul je geboortedatum in"
 "our shop","onze winkel"
-
+"Some payments will be missing. To use them, set %1 in Stores -> Configuration -> General -> Currency setup", "Sommige betalingen zullen ontbreken. Om ze te gebruiken, stelt u %1 in in Winkels -> Configuratie -> Algemeen -> Valuta instellen"
 

@@ -1,4 +1,4 @@
-Magento 2 2.0.8
+Magento 2 2.0.9
 ------------------------------   
 
 # Changelog #
@@ -75,3 +75,7 @@ Magento 2 2.0.8
 
 * Fixed wrong order state
 * Fixed case when total paid amount was unpaid
+
+## Changes in version 2.0.9
+
+* Improved notification system for unsupported currencies
