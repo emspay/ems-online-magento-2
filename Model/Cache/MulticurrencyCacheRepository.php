@@ -33,6 +33,10 @@ class MulticurrencyCacheRepository
 
     public function get()
     {
+        if (!$this->isCacheExist())
+        {
+            return false;
+        }
         $jsonContent = file_get_contents(__DIR__."/currencyList.json");
         return (json_decode($jsonContent, true));
     }
