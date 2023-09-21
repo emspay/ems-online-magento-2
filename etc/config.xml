@@ -21,7 +21,7 @@
             <ginger_methods_banktransfer>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\Banktransfer</model>
-                <title>Banktransfer</title>
+                <title>Bank transfer</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -40,7 +40,7 @@
             <ginger_methods_creditcard>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\Creditcard</model>
-                <title>Credit Cards</title>
+                <title>Credit/debit card</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -66,7 +66,7 @@
             <ginger_methods_ideal>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\Ideal</model>
-                <title>iDeal</title>
+                <title>iDEAL</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -92,7 +92,7 @@
             <ginger_methods_klarnapaynow>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\KlarnaPayNow</model>
-                <title>Klarna Pay Now</title>
+                <title>Klarna pay now</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -105,7 +105,7 @@
             <ginger_methods_paypal>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\Paypal</model>
-                <title>Paypal</title>
+                <title>PayPal</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -131,7 +131,7 @@
             <ginger_methods_klarnapaylater>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\KlarnaPayLater</model>
-                <title>Klarna Pay Later</title>
+                <title>Klarna pay later</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>
@@ -183,7 +183,7 @@
             <ginger_methods_giropay>
                 <active>1</active>
                 <model>GingerPay\Payment\Model\Methods\GiroPay</model>
-                <title>GiroPay</title>
+                <title>Giropay</title>
                 <description>Your order %id% at %name%</description>
                 <order_status_pending>pending_payment</order_status_pending>
                 <generate_invoice>1</generate_invoice>

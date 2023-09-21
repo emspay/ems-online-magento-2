@@ -432,7 +432,7 @@ class ConfigRepositoryBuilder extends ApiBuilder implements ConfigRepositoryInte
             return false;
         }
 
-        $logo = sprintf('%s::images/%s.png', self::MODULE_CODE, $this->getShortMethodCode($code));
+        $logo = sprintf('%s::images/%s.svg', self::MODULE_CODE, $this->getShortMethodCode($code));
         return $this->assetRepository->getUrl($logo);
     }
 

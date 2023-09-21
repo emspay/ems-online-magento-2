@@ -17,7 +17,7 @@
             <label>Title</label>
             <config_path>payment/ginger_methods_paypal/title</config_path>
             <depends>
-                <field id="active">1</field>
+                <field id="active">0</field>
             </depends>
         </field>
         <field id="description" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1"

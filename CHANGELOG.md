@@ -1,4 +1,4 @@
-Magento 2 2.0.9 
+Magento 2 2.0.10 
 ------------------------------   
 
 # Changelog #
@@ -79,3 +79,7 @@ Magento 2 2.0.9
 ## Changes in version 2.0.9
 
 * Improved notification system for unsupported currencies
+
+## Changes in version 2.0.10
+
+* Changed payment method icons
