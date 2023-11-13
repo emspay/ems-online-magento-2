@@ -1,4 +1,4 @@
-Magento 2 2.0.10 
+Magento 2 2.0.11 
 ------------------------------   
 
 # Changelog #
@@ -83,3 +83,8 @@ Magento 2 2.0.10
 ## Changes in version 2.0.10
 
 * Changed payment method icons
+
+## Changes in version 2.0.11
+
+* Fixed issue with extra field in customer array
+* Replaced extra array for client array

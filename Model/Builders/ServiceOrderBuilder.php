@@ -115,7 +115,6 @@ class ServiceOrderBuilder
             'phone_numbers' => [$customer->getTelephone()],
             'user_agent' => $this->getUserAgent(),
             'ip_address' => $order->getRemoteIp(),
-            'forwarded_ip' => $order->getXForwardedFor(),
             'locale' => $this->resolver->getLocale()
         ];
 
@@ -152,21 +151,12 @@ class ServiceOrderBuilder
 
         $offset = strlen($streetAddress);
 
-        while (($offset = $this->rstrpos($streetAddress, ' ', $offset)) !== false) {
-            if ($offset < strlen($streetAddress) - 1 && is_numeric($streetAddress[$offset + 1])) {
-                $address = trim(substr($streetAddress, 0, $offset));
-                $houseNumber = trim(substr($streetAddress, $offset + 1));
-                break;
-            }
-        }
-
-        if (empty($houseNumber) && strlen($streetAddress) > 0 && is_numeric($streetAddress[0])) {
-            $pos = strpos($streetAddress, ' ');
-
-            if ($pos !== false) {
-                $houseNumber = trim(substr($streetAddress, 0, $pos), ", \t\n\r\0\x0B");
-                $address = trim(substr($streetAddress, $pos + 1));
-            }
+        if (preg_match('/^(\d+[\w\s\-\/]*)\s*(.*)$/', $streetAddress, $matches)) {
+            $houseNumber = $matches[1];
+            $address = $matches[2];
+        } elseif (preg_match('/^(.*)\s+(\d+[\w\s\-\/]*)$/', $streetAddress, $matches)) {
+            $address = $matches[1];
+            $houseNumber = $matches[2];
         }
 
         return [$address, $houseNumber];
@@ -234,7 +224,7 @@ class ServiceOrderBuilder
             'return_url' => $urlProvider->getReturnUrl(),
             'webhook_url' => $urlProvider->getWebhookUrl(),
             'transactions' => $paymentDetails,
-            'extra' => $this->getExtraLines(),
+            'client' => $this->getClientLines(),
             'order_lines' => $orderLines->get($order),
             'customer' => $customerData
         ]);
@@ -242,11 +232,11 @@ class ServiceOrderBuilder
     }
 
     /**
-     * Collect data for extra_lines
+     * Collect data for client_lines
      *
      * @return array
      */
-    public function getExtraLines()
+    public function getClientLines()
     {
         return [
             'user_agent' => $this->getUserAgent(),

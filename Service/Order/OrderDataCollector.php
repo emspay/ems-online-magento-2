@@ -12,12 +12,12 @@ use GingerPay\Payment\Api\Config\RepositoryInterface as ConfigRepository;
 use Magento\Framework\App\ProductMetadataInterface ;
 
 /**
- * ExtraLines order class
+ * ClientLines order class
  */
 class OrderDataCollector extends ServiceOrderRedefiner
 {
     /**
-     * ExtraLines constructor.
+     * ClientLines constructor.
      *
      * @param ConfigRepository $configRepository
      * @param ProductMetadataInterface $productMetadata
