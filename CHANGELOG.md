@@ -1,4 +1,4 @@
-Magento 2 2.0.11 
+Magento 2 2.0.12 
 ------------------------------   
 
 # Changelog #
@@ -92,4 +92,4 @@ Magento 2 2.0.11
 ## Changes in version 2.0.12
 
 * Removed iDeal issuers
-* Change in additional address
+* Change in additional address  
