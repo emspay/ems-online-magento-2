@@ -188,19 +188,17 @@ class ServiceOrderBuilder
 
     /**
      * @param $platformCode
-     * @param $issuer_id
      *
      * @return array
      */
 
-    public function getTransactions($platformCode, $issuer_id = null, $verifiedTermsOfService = null)
+    public function getTransactions($platformCode, $verifiedTermsOfService = null)
     {
         return [
             array_filter([
                 "payment_method"         => $platformCode,
                 "payment_method_details" => array_filter(
                     [
-                        "issuer_id" => $issuer_id,
                         "verified_terms_of_service" => $verifiedTermsOfService
                     ]
                 )

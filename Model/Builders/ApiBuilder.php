@@ -39,7 +39,6 @@ class ApiBuilder
      * Endpoint
      */
     const ENDPOINT = 'https://api.online.emspay.eu/';
-
     /**
      * Ginger
      */

@@ -88,3 +88,8 @@ Magento 2 2.0.11
 
 * Fixed issue with extra field in customer array
 * Replaced extra array for client array
+
+## Changes in version 2.0.12
+
+* Removed iDeal issuers
+* Change in additional address

@@ -15,21 +15,12 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'GingerPay_Payment/payment/ideal',
-                selectedIssuer: null
-            },
-            getIssuers: function () {
-                var issuers = checkoutConfig[this.item.method].issuers;
-                console.log(checkoutConfig[this.item.method])
-                issuers.unshift({"id":"SELECTYOURBANK", "name":$t('-- Select your bank')});
-                return issuers;
+                template: 'GingerPay_Payment/payment/ideal'
             },
             getData: function () {
                 return {
-                    'method': this.item.method,
-                    'additional_data': {
-                        "issuer": this.selectedIssuer
-                    }
+                    'method': this.item.method
+
                 };
             },
             validate: function () {

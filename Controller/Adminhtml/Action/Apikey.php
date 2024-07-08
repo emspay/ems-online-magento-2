@@ -95,7 +95,6 @@ class Apikey extends Action
                 $results[] = '<span class="ginger-error">' . __('Error! '.$apiKey.'Invalid API Key.') . '</span>';
                 $success = false;
             } else {
-                $client->getIdealIssuers();
                 $this->multicurrencyCacheRepository->set($client);
                 $results[] = '<span class="ginger-success">' . __('Success!') . '</span>';
             }

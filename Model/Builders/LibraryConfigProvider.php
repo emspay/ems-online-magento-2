@@ -71,10 +71,6 @@ class LibraryConfigProvider extends ConfigRepositoryBuilder
             {
                 $config['payment'][$code]['instructions'] = $this->getInstructions($code);
 
-                if ($code == Ideal::METHOD_CODE && $client)
-                {
-                    $config['payment'][$code]['issuers'] = $this->getIssuers($client);
-                }
                 if ($code == Banktransfer::METHOD_CODE) {
                     $config['payment'][$code]['mailingAddress'] = $this->getMailingAddress($code);
                 }
@@ -118,20 +114,6 @@ class LibraryConfigProvider extends ConfigRepositoryBuilder
     protected function getInstructions(string $code)
     {
         return nl2br($this->escaper->escapeHtml($this->methods[$code]->getInstructions()));
-    }
-
-    /**
-     * @param \Ginger\ApiClient $client
-     *
-     * @return array|bool
-     */
-    public function getIssuers($client)
-    {
-        if ($issuers = $this->paymentLibraryModel->getIssuers($client)) {
-
-             return $issuers;
-        }
-        return false;
     }
 
     /**

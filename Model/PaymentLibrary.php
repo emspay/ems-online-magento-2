@@ -376,16 +376,6 @@ class PaymentLibrary extends AbstractMethod
     }
 
     /**
-     * @param \Ginger\ApiClient $client
-     *
-     * @return array
-     */
-    public function getIssuers($client)
-    {
-        return $client->getIdealIssuers();
-    }
-
-    /**
      * @param InfoInterface $payment
      * @param float $amount
      *
@@ -470,7 +460,7 @@ class PaymentLibrary extends AbstractMethod
                 break;
         }
 
-        $paymentDetails = $this->orderDataCollector->getTransactions($platformCode, $issuer, $verifiedTermsOfService);
+        $paymentDetails = $this->orderDataCollector->getTransactions($platformCode, $verifiedTermsOfService);
 
         $orderData = $this->orderDataCollector->collectDataForOrder($order, $methodCode, $this->urlProvider, $this->orderLines, $paymentDetails, $custumerData);
 
